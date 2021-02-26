@@ -1,1 +1,1 @@
-let sum = (m, n) => m + n;
+const sum = (m, n) => m + n;
