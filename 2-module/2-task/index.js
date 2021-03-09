@@ -1,3 +1,1 @@
-function isEmpty(obj) {
-  // ваш код...
-}
+const isEmpty = (obj) => (Object.keys(obj).length === 0 || obj === undefined || obj === null) ? true : false;
