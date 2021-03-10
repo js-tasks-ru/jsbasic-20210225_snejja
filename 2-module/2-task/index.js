@@ -1,1 +1,1 @@
-const isEmpty = (obj) => (Object.keys(obj).length === 0 || obj === undefined || obj === null) ? true : false;
+const isEmpty = (obj) => (obj === undefined || obj === null || Object.keys(obj).length === 0);
