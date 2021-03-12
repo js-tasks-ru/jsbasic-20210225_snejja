@@ -1,1 +1,1 @@
-const namify = (users) => users.map(item => item.name);
+const namify = (users) => users.map(({ name }) => name);
