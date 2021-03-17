@@ -12,7 +12,7 @@ function highlight(table) {
       dataPersons.rows[i].setAttribute("hidden", "true");
     }
 
-    dataPersons.rows[i].classList.add(cellGender.innerHTML === "m" ? "male" : "female");
-    dataPersons.rows[i].style = Number(cellAge.innerHTML) < 18 ? "text-decoration: line-through" : "";
+    dataPersons.rows[i].classList.add(cellGender.textContent === "m" ? "male" : "female");
+    dataPersons.rows[i].style = Number(cellAge.textContent) < 18 ? "text-decoration: line-through" : "";
   } 
 }
