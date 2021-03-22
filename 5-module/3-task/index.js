@@ -6,34 +6,28 @@ function initCarousel() {
   const carouselCount = carousel.children.length;
   const slideWidth = carousel.offsetWidth;
 
-  let width = 0;
-  let current = 0;
+  let currentTranslateX = 0;
+  let currentSlide = 0;
   arrowLeft.style.display = 'none';
 
-  const switchLeft = () => { 
-    current--;         
-    if (current === 0)
-    {
-      arrowLeft.style.display = 'none';
-    }
+  function switchDirection(direction) {  
+    return function () {            
+      arrowRight.style.display = '';      
+      arrowLeft.style.display = '';
 
-    arrowRight.style.display = '';
-    width += slideWidth;
-    carousel.style.transform = `translateX(${width}px)`;
-  };
+      currentSlide -= direction;
 
-  const switchRight = () => {     
-    current++;
-    if (current === carouselCount - 1)
-    {
-      arrowRight.style.display = 'none';
-    }
+      if (currentSlide === 0) {
+        arrowLeft.style.display = 'none';
+      } else if (currentSlide === carouselCount - 1) {
+        arrowRight.style.display = 'none';
+      }
 
-    arrowLeft.style.display = '';
-    width -= slideWidth;
-    carousel.style.transform = `translateX(${width}px)`;
-  };
+      currentTranslateX += slideWidth * direction;
+      carousel.style.transform = `translateX(${currentTranslateX}px)`;
+    };
+  }
 
-  arrowLeft.addEventListener('click', switchLeft);
-  arrowRight.addEventListener('click', switchRight);
+  arrowLeft.addEventListener('click', switchDirection(1));
+  arrowRight.addEventListener('click', switchDirection(-1));
 }
