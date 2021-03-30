@@ -1,12 +1,14 @@
 import createElement from '../../assets/lib/create-element.js';
 
 function renderCarousel({carouselSlides, carouselArrowsButtons}) {
-  let root = document.createElement('div');
-  root.className = "carousel"; 
-  root.innerHTML = `
-    ${carouselArrowsButtons}
-    <div class="carousel__inner">${carouselSlides}</div>`;
-  return root; 
+  let carousel = `
+    <div class="carousel">
+      ${carouselArrowsButtons}
+      <div class="carousel__inner">${carouselSlides}</div>
+    </div>
+  `;
+
+  return createElement(carousel); 
 }
 
 function carouselSlides({slides = {}}) {  
@@ -73,7 +75,7 @@ export default class Carousel {
   }
 
   _switchDirection = (direction) => () => {  
-    let _slideWidth = this._carousel.offsetWidth;
+    let slideWidth = this._carousel.offsetWidth;    
     this._arrowRight.style.display = '';      
     this._arrowLeft.style.display = '';
 
@@ -85,12 +87,17 @@ export default class Carousel {
       this._arrowRight.style.display = 'none';
     }
 
-    this._currentTranslateX += _slideWidth * direction;
+    this._currentTranslateX += slideWidth * direction;
     this._carousel.style.transform = `translateX(${this._currentTranslateX}px)`;
   }
 
   _onButtonAddClick = (event) => {
     let slide = event.target.closest('.carousel__slide');
+
+    if (!slide) {
+      return;
+    }
+
     this.elem.dispatchEvent(new CustomEvent('product-add', {    
       detail: slide.dataset.id,
       bubbles: true

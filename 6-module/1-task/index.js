@@ -24,7 +24,7 @@ function bodyTable({data = []}) {
       <td>${el.age}</td>
       <td>${el.salary}</td>
       <td>${el.city}</td>
-      <td><button>X</button></td>
+      <td><button data-action="remove">X</button></td>
     </tr>
   `);   
 }
@@ -40,7 +40,7 @@ export default class UserTable {
   }
 
   get _buttons() {
-    return this.elem.querySelectorAll('button');
+    return this.elem.querySelectorAll('[data-action="remove"]');
   }
 
   _onButtonClick(event) {
