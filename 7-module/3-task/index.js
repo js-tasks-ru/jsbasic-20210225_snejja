@@ -24,37 +24,37 @@ function stepsSlider(count, value) {
 
 export default class StepSlider {
   constructor({ steps, value = 0 }) {
-    this.steps = steps;
-    this.value = value;    
-    this.elem = createSlider({ steps: stepsSlider(this.steps, this.value) });    
+    this._steps = steps;
+    this._value = value;    
+    this.elem = createSlider({ steps: stepsSlider(this._steps, this._value) });    
     this.elem.addEventListener('click', this._onChangeValueSlider);    
   }
 
   _onChangeValueSlider = (event) => {
-    this.value = this._getApproximateValueSlider(event);
+    this._value = this._getApproximateValueSlider(event);
 
     this.elem.dispatchEvent(new CustomEvent('slider-change', { 
-      detail: this.value, 
+      detail: this._value, 
       bubbles: true 
     }));
 
     const valueSlider = this.elem.querySelector('.slider__value');
-    valueSlider.innerHTML = this.value;
+    valueSlider.innerHTML = this._value;
 
     const activeStep = this.elem.querySelector('.slider__step-active');
     activeStep.classList.remove('slider__step-active');
 
     const spans = this.elem.querySelector('.slider__steps').querySelectorAll('span');
-    spans[this.value].classList.add('slider__step-active');
+    spans[this._value].classList.add('slider__step-active');
     
-    const nearectValuePercent = this.value / (this.steps - 1) * 100;
+    const nearectValuePercent = this._value / (this._steps - 1) * 100;
     this._changeProgressPositionSlider(nearectValuePercent);
   }
 
   _getApproximateValueSlider = (event) => {
     let left = event.clientX - this.elem.getBoundingClientRect().left;
     let leftRelative = left / this.elem.offsetWidth;
-    let segments = this.steps - 1;
+    let segments = this._steps - 1;
     let approximateValue = leftRelative * segments;
     return Math.round(approximateValue);
   }

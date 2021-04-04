@@ -21,32 +21,35 @@ function createModalWindow() {
 
 export default class Modal {
   constructor() {
-    this.modalWindow = createModalWindow();
-    this.body = document.body;
+    this._modalWindow = createModalWindow();
+    this._body = document.body;
 
-    this.modalWindow.querySelector('.modal__close').addEventListener('click', this.close);
-    document.addEventListener('keydown', (event) => {
-      if(event.code === 'Escape') this.close();
-    });    
+    this._modalWindow.querySelector('.modal__close').addEventListener('click', this.close);
+    document.addEventListener('keydown', this._onCloseWindow);
+  }
+
+  _onCloseWindow = (event) => {
+    if (event.code === 'Escape') this.close();
   }
 
   setTitle(title) {
-    const modalTitle = this.modalWindow.querySelector('.modal__title');
+    const modalTitle = this._modalWindow.querySelector('.modal__title');
     modalTitle.innerHTML = title;
   }
 
   setBody (rootHTML) {
-    const modalBody = this.modalWindow.querySelector('.modal__body');
+    const modalBody = this._modalWindow.querySelector('.modal__body');
     modalBody.innerHTML += rootHTML.outerHTML;
   }
 
   open = () => {
-    this.body.classList.add("is-modal-open");
-    this.body.append(this.modalWindow);
+    this._body.classList.add("is-modal-open");
+    this._body.append(this._modalWindow);
   }
 
   close = () => {
-    this.body.classList.remove("is-modal-open");
-    this.modalWindow.remove();
+    this._body.classList.remove("is-modal-open");
+    this._modalWindow.remove();
+    document.removeEventListener('keydown', this._onCloseWindow);
   }
 }

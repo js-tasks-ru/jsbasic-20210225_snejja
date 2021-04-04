@@ -24,9 +24,9 @@ function stepsSlider(count, value) {
 
 export default class StepSlider {
   constructor({ steps, value = 0 }) {
-    this.steps = steps;
-    this.value = value;    
-    this.elem = createSlider({ steps: stepsSlider(this.steps, this.value) }); 
+    this._steps = steps;
+    this._value = value;    
+    this.elem = createSlider({ steps: stepsSlider(this._steps, this._value) }); 
     this.elem.addEventListener('click', this._onChangeValueSliderClick);  
     
     this._spansStepsSlider = this.elem.querySelector('.slider__steps').querySelectorAll('span');
@@ -57,30 +57,32 @@ export default class StepSlider {
     if (leftRelative < 0) leftRelative = 0;    
     if (leftRelative > 1) leftRelative = 1;
 
-    let segments = this.steps - 1;
+    let segments = this._steps - 1;
     let approximateValue = leftRelative * segments;
     return approximateValue;
   }
 
   _setActiveStepSlider() {
     let valueSlider = this.elem.querySelector('.slider__value');
-    valueSlider.innerHTML = this.value;
+    valueSlider.innerHTML = this._value;
 
     let activeStep = this.elem.querySelector('.slider__step-active');
     activeStep.classList.remove('slider__step-active');
 
-    this._spansStepsSlider[this.value].classList.add('slider__step-active');
+    this._spansStepsSlider[this._value].classList.add('slider__step-active');
   }
 
   _onChangeValueSliderClick = (event) => {
-    this.value = Math.round(this._getApproximateValueSlider(event));
+    if (event.target === this._thumbSlider) return;
+
+    this._value = Math.round(this._getApproximateValueSlider(event));
 
     this._setActiveStepSlider();
-    const nearectValuePercent = this.value / (this.steps - 1) * 100;
+    const nearectValuePercent = this._value / (this._steps - 1) * 100;
     this._changeProgressPositionSlider(nearectValuePercent);    
     
     this.elem.dispatchEvent(new CustomEvent('slider-change', { 
-      detail: this.value, 
+      detail: this._value, 
       bubbles: true 
     }));
   }
@@ -89,10 +91,10 @@ export default class StepSlider {
     this.elem.classList.add('slider_dragging');
 
     let nearestValue = this._getApproximateValueSlider(event);
-    this.value = Math.round(nearestValue);
+    this._value = Math.round(nearestValue);
 
     this._setActiveStepSlider();
-    const nearectValuePercent = nearestValue / (this.steps - 1) * 100;
+    const nearectValuePercent = nearestValue / (this._steps - 1) * 100;
     this._changeProgressPositionSlider(nearectValuePercent);
   }
 
@@ -100,11 +102,11 @@ export default class StepSlider {
     this.elem.classList.remove('slider_dragging');
     
     this.elem.dispatchEvent(new CustomEvent('slider-change', { 
-      detail: this.value,
+      detail: this._value,
       bubbles: true 
     }));
 
-    const nearectValuePercent = this.value / (this.steps - 1) * 100;
+    const nearectValuePercent = this._value / (this._steps - 1) * 100;
     this._changeProgressPositionSlider(nearectValuePercent);
 
     document.removeEventListener('pointerup', this._onMouseUp);
